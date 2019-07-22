@@ -4,17 +4,15 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 object Utils {
-    fun parseFullName(fullName:String): Pair<String?, String?>{
-        // FIX IT
-        val parts : List<String>? = fullName?.split(" ")
-
-        var firstName = parts?.getOrNull(0)
-        var lastName = parts?.getOrNull(1)
-
-        if(firstName == "" || firstName == null && lastName == null)
+    fun parseFullName(fullName:String?): Pair<String?, String?> {
+        if (fullName?.replace(" ", "") == "")
             return null to null
-        else
+        else{
+            val parts: List<String>? = fullName?.split(" ")
+            var firstName = parts?.getOrNull(0)
+            var lastName = parts?.getOrNull(1)
             return firstName to lastName
+        }
     }
 
     fun transliteration(payload: String, divider: String = " "): String {
