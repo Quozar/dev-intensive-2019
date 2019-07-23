@@ -5,13 +5,14 @@ import kotlin.collections.HashMap
 
 object Utils {
     fun parseFullName(fullName:String?): Pair<String?, String?> {
-        if (fullName?.replace(" ", "") == "")
-            return null to null
+
+        return if (fullName?.replace(" ", "") == "")
+            null to null
         else{
             val parts: List<String>? = fullName?.split(" ")
             var firstName = parts?.getOrNull(0)
             var lastName = parts?.getOrNull(1)
-            return firstName to lastName
+            firstName to lastName
         }
     }
 
