@@ -1,4 +1,4 @@
-package ru.skillbranch.devintensive
+package ru.skillbranch.devintensive.utils
 
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -10,8 +10,8 @@ object Utils {
             null to null
         else{
             val parts: List<String>? = fullName?.split(" ")
-            var firstName = parts?.getOrNull(0)
-            var lastName = parts?.getOrNull(1)
+            val firstName = parts?.getOrNull(0)
+            val lastName = parts?.getOrNull(1)
             firstName to lastName
         }
     }

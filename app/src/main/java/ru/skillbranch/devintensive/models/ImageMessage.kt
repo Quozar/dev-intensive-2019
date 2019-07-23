@@ -1,5 +1,6 @@
-package ru.skillbranch.devintensive
+package ru.skillbranch.devintensive.models
 
+import ru.skillbranch.devintensive.extensions.humanizeDiff
 import java.util.*
 
 class ImageMessage(
