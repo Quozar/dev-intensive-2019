@@ -16,7 +16,7 @@ object Utils {
         }
     }
 
-    fun transliteration(payload: String, divider: String = " "): String {
+    fun transliteration(payload: String?, divider: String? = " "): String? {
 
         val table: HashMap<String, String> = HashMap()
         table.put("а", "a")
@@ -53,49 +53,53 @@ object Utils {
         table.put("ю", "yu")
         table.put("я", "ya")
 
-        val payloadList: List<String> = payload.split(" ")
-        var returnList: ArrayList<String> = ArrayList()
+        if (payload == null)
+            return null
+        else {
+            val payloadList: List<String> = payload.split(" ")
+            val returnList: ArrayList<String> = ArrayList()
 
-        for(word in payloadList){
-            var lWord = ""  // Слово на Латинице
+            for(word in payloadList){
+                var lWord = ""  // Слово на Латинице
 
-            for(symbol in 0 until word.length){
-                if(table.containsKey(word.substring(symbol, symbol + 1).toLowerCase())) // Повышение регистра первой буквы
-                    if(symbol == 0) {
-                        lWord += table.get(word.substring(symbol, symbol + 1).toLowerCase())
-                        if(lWord.length > 1){   // Если первая буква Кирилицы превратилась в ДВЕ буквы латиницы
-                            var begin: String = lWord.substring(0, 1)
-                            begin = begin.toUpperCase()
-                            var end: String = lWord.substring(1, lWord.length)
-                            lWord = begin + end
-                        }else
-                            lWord = lWord.toUpperCase()
+                for(symbol in 0 until word.length){
+                    if(table.containsKey(word.substring(symbol, symbol + 1).toLowerCase())) // Повышение регистра первой буквы
+                        if(symbol == 0) {
+                            lWord += table.get(word.substring(symbol, symbol + 1).toLowerCase())
+                            if(lWord.length > 1){   // Если первая буква Кирилицы превратилась в ДВЕ буквы латиницы
+                                var begin: String = lWord.substring(0, 1)
+                                begin = begin.toUpperCase()
+                                val end: String = lWord.substring(1, lWord.length)
+                                lWord = begin + end
+                            }else
+                                lWord = lWord.toUpperCase()
+                        }
+                        else
+                            lWord += table.get(word.substring(symbol, symbol + 1).toLowerCase())
+                    else {
+                        returnList.add(word)
+                        break
                     }
-                    else
-                        lWord += table.get(word.substring(symbol, symbol + 1).toLowerCase())
-                else {
-                    returnList.add(word)
-                    break
                 }
+                if(lWord != "")
+                    returnList.add(lWord)
             }
-            if(lWord != "")
-                returnList.add(lWord)
-        }
 
-        var transliteratedName = ""
-        for(word in returnList){
-            transliteratedName += word + divider
-        }
+            var transliteratedName = ""
+            for(word in returnList){
+                transliteratedName += word + divider
+            }
 
-        return transliteratedName.substring(0, transliteratedName.length - 1)
+            return transliteratedName.substring(0, transliteratedName.length - 1)
+        }
     }
 
     fun toInitials(firstName: String?, lastName: String?): String? {
         if(firstName == null && lastName != null)
-            return "${lastName?.substring(0, 1).toUpperCase()}"
-        if(firstName != null && lastName == null)
-            return "${firstName?.substring(0, 1).toUpperCase()}"
-        if(firstName == null && lastName == null || firstName?.trim() == "" && lastName?.trim() == "")
+            return lastName.substring(0, 1).toUpperCase()
+        else if(firstName != null && lastName == null)
+            return firstName.substring(0, 1).toUpperCase()
+        else if(firstName == null && lastName == null || firstName?.trim() == "" && lastName?.trim() == "")
             return null
         else
             return "${firstName?.substring(0, 1)?.toUpperCase()}${lastName?.substring(0, 1)?.toUpperCase()}"
