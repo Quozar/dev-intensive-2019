@@ -27,24 +27,15 @@ fun Date.humanizeDiff(date: Date = Date()): String {
         if (diff > 360 * DAY)
             return "более года назад"
         else if (diff < 360 * DAY && diff > 26 * HOUR)
-            if (diff / DAY < 5)
-                return "${diff / DAY} дня назад"
-            else
-                return "${diff / DAY} дней назад"
+            return "${TimeUnits.DAY.plural((diff / DAY).toInt())} назад"
         else if (diff < 26 * HOUR && diff > 22 * HOUR)
             return "день назад"
         else if (diff < 22 * HOUR && diff > 75 * MINUTE)
-            if (diff / HOUR < 5)
-                return "${diff / HOUR} часа назад"
-            else
-                return "${diff / HOUR} часов назад"
+            return "${TimeUnits.HOUR.plural((diff / HOUR).toInt())} назад"
         else if (diff < 75 * MINUTE && diff > 45 * MINUTE)
             return "час назад"
         else if (diff < 45 * MINUTE && diff > 75 * SECOND)
-            if (diff / MINUTE < 5)
-                return "${diff / MINUTE} минуты назад"
-            else
-                return "${diff / MINUTE} минут назад"
+            return "${TimeUnits.MINUTE.plural((diff / MINUTE).toInt())} назад"
         else if (diff < 75 * SECOND && diff > 45 * SECOND)
             return "минуту назад"
         else if (diff < 45 * SECOND && diff > SECOND)
@@ -56,24 +47,15 @@ fun Date.humanizeDiff(date: Date = Date()): String {
         else if (diff > (-1) * 75 * SECOND && diff < (-1) * 45 * SECOND)
             return "через минуту"
         else if (diff > (-1) * 45 * MINUTE && diff < (-1) * 75 * SECOND)
-            if ((-1) * diff / MINUTE < 5)
-                return "через ${(-1) * diff / MINUTE} минуты"
-            else
-                return "через ${(-1) * diff / MINUTE} минут"
+            return "через ${TimeUnits.MINUTE.plural(((-1) * diff / MINUTE).toInt())}"
         else if (diff > (-1) * 75 * MINUTE && diff < (-1) * 45 * MINUTE)
             return "через час"
         else if (diff > (-1) * 22 * HOUR && diff < (-1) * 75 * MINUTE)
-            if ((-1) * diff / HOUR < 5)
-                return "через ${(-1) * diff / HOUR} часа"
-            else
-                return "через ${(-1) * diff / HOUR} часов"
+            return "через ${TimeUnits.HOUR.plural(((-1) * diff / HOUR).toInt())}"
         else if (diff > (-1) * 26 * HOUR && diff < (-1) * 22 * HOUR)
             return "будет завтра"
         else if (diff > (-1) * 360 * DAY && diff < (-1) * 26 * HOUR)
-            if ((-1) * diff / DAY < 5)
-                return "через ${(-1) * diff / DAY} дня"
-            else
-                return "через ${(-1) * diff / DAY} дней"
+            return "через ${TimeUnits.DAY.plural(((-1) * diff / DAY).toInt())}"
         else
             return "более чем через год"
         }
