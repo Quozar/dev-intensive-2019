@@ -16,6 +16,7 @@ object Utils {
         }
     }
 
+    // IT WORKS, BUT UNIT TEST ON SKILLBRANCH NOT COMPILES, SO I SHOULD FIX IT
     fun transliteration(payload: String?, divider: String? = " "): String? {
 
         val table: HashMap<String, String> = HashMap()
