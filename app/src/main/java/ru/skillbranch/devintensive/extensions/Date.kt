@@ -27,29 +27,36 @@ fun Date.add(value: Int, units: TimeUnits = TimeUnits.SECOND) : Date {
 }
 
 enum class TimeUnits{
-    SECOND,
-    MINUTE,
-    HOUR,
-    DAY;
-
-    fun plural(value: Int) : String {
-        when(this) {
-            SECOND -> return when(value) {
+    SECOND {
+        override fun plural(value: Int) : String {
+            return when (value) {
                 1, 21, 31, 41, 51, 61 -> "$value секунду"
                 2, 3, 4, 22, 23, 24, 32, 33, 34, 42, 43, 44, 52, 53, 54, 62, 63, 64 -> "$value секунды"
                 else -> "$value секунд"
             }
-            MINUTE -> return when(value) {
+        }
+    },
+    MINUTE {
+        override fun plural(value: Int) : String {
+            return when(value) {
                 1, 21, 31, 41, 51, 61 -> "$value минуту"
                 2, 3, 4, 22, 23, 24, 32, 33, 34, 42, 43, 44, 52, 53, 54, 62, 63, 64 -> "$value минуты"
                 else -> "$value минут"
             }
-            HOUR -> return when(value) {
+        }
+    },
+    HOUR {
+        override fun plural(value: Int) : String {
+            return when(value) {
                 1, 21 -> "$value час"
                 2, 3, 4, 22, 23, 24 -> "$value часа"
                 else -> "$value часов"
             }
-            DAY -> return when(value) {
+        }
+    },
+    DAY {
+        override fun plural(value: Int) : String {
+            return when(value) {
                 1, 21, 31, 41, 51, 61, 71, 81, 91, 101, 121, 131, 141, 151, 161, 171, 181, 191, 201,
                 221, 231, 241, 251, 261, 271, 281, 291, 301, 321, 331, 341, 351, 361, 371 -> "$value день"
 
@@ -63,5 +70,7 @@ enum class TimeUnits{
                 else -> "$value дней"
             }
         }
-    }
+    };
+
+    abstract fun plural(value: Int) : String
 }
