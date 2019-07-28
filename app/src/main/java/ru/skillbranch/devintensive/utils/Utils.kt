@@ -4,11 +4,11 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 object Utils {
-    fun parseFullName(fullName:String?): Pair<String?, String?> {
+    fun parseFullName(fullName: String?): Pair<String?, String?> {
 
         return if (fullName?.replace(" ", "") == "")
             null to null
-        else{
+        else {
             val parts: List<String>? = fullName?.split(" ")
             val firstName = parts?.getOrNull(0)
             val lastName = parts?.getOrNull(1)
@@ -17,92 +17,75 @@ object Utils {
     }
 
     // IT WORKS, BUT UNIT TEST ON SKILLBRANCH NOT COMPILES, SO I SHOULD FIX IT
-    fun transliteration(payload: String?, divider: String? = " "): String? {
-
-        val table: HashMap<String, String> = HashMap()
-        table.put("а", "a")
-        table.put("б", "b")
-        table.put("в", "v")
-        table.put("г", "g")
-        table.put("д", "d")
-        table.put("е", "e")
-        table.put("ё", "e")
-        table.put("ж", "zh")
-        table.put("з", "z")
-        table.put("и", "i")
-        table.put("й", "i")
-        table.put("к", "k")
-        table.put("л", "l")
-        table.put("м", "m")
-        table.put("н", "n")
-        table.put("о", "o")
-        table.put("п", "p")
-        table.put("р", "r")
-        table.put("с", "s")
-        table.put("т", "t")
-        table.put("у", "u")
-        table.put("ф", "f")
-        table.put("х", "h")
-        table.put("ц", "c")
-        table.put("ч", "ch")
-        table.put("ш", "sh")
-        table.put("щ", "sh")
-        table.put("ъ", "")
-        table.put("ы", "i")
-        table.put("ь", "")
-        table.put("э", "e")
-        table.put("ю", "yu")
-        table.put("я", "ya")
-
+    fun transliteration(payload: String?, divider: String = " "): String? {
         if (payload == null)
             return null
         else {
-            val payloadList: List<String> = payload.split(" ")
+            val payloadList: List<String> = payload.toLowerCase().split(" ")
             val returnList: ArrayList<String> = ArrayList()
 
-            for(word in payloadList){
-                var lWord = ""  // Слово на Латинице
-
-                for(symbol in 0 until word.length){
-                    if(table.containsKey(word.substring(symbol, symbol + 1).toLowerCase())) // Повышение регистра первой буквы
-                        if(symbol == 0) {
-                            lWord += table.get(word.substring(symbol, symbol + 1).toLowerCase())
-                            if(lWord.length > 1){   // Если первая буква Кирилицы превратилась в ДВЕ буквы латиницы
-                                var begin: String = lWord.substring(0, 1)
-                                begin = begin.toUpperCase()
-                                val end: String = lWord.substring(1, lWord.length)
-                                lWord = begin + end
-                            }else
-                                lWord = lWord.toUpperCase()
-                        }
-                        else
-                            lWord += table.get(word.substring(symbol, symbol + 1).toLowerCase())
-                    else {
-                        returnList.add(word)
-                        break
+            for (word in payloadList) {
+                var ltnWord = ""
+                for (symbol in word) {
+                    when (symbol) {
+                        'а' -> ltnWord += "a"
+                        'б' -> ltnWord += "b"
+                        'в' -> ltnWord += "v"
+                        'г' -> ltnWord += "g"
+                        'д' -> ltnWord += "d"
+                        'е' -> ltnWord += "e"
+                        'ё' -> ltnWord += "e"
+                        'ж' -> ltnWord += "zh"
+                        'з' -> ltnWord += "z"
+                        'и' -> ltnWord += "i"
+                        'й' -> ltnWord += "i"
+                        'к' -> ltnWord += "k"
+                        'л' -> ltnWord += "l"
+                        'м' -> ltnWord += "m"
+                        'н' -> ltnWord += "n"
+                        'о' -> ltnWord += "o"
+                        'п' -> ltnWord += "p"
+                        'р' -> ltnWord += "r"
+                        'с' -> ltnWord += "s"
+                        'т' -> ltnWord += "t"
+                        'у' -> ltnWord += "u"
+                        'ф' -> ltnWord += "f"
+                        'х' -> ltnWord += "h"
+                        'ц' -> ltnWord += "c"
+                        'ч' -> ltnWord += "ch"
+                        'ш' -> ltnWord += "sh"
+                        'щ' -> ltnWord += "sh"
+                        'ъ' -> ltnWord += ""
+                        'ы' -> ltnWord += "i"
+                        'ь' -> ltnWord += ""
+                        'э' -> ltnWord += "e"
+                        'ю' -> ltnWord += "yu"
+                        'я' -> ltnWord += "ya"
+                        else -> ltnWord += ""
                     }
                 }
-                if(lWord != "")
-                    returnList.add(lWord)
+                returnList += if (ltnWord == "") word else ltnWord
             }
 
-            var transliteratedName = ""
-            for(word in returnList){
-                transliteratedName += word + divider
+            var rWord = ""
+            for (word in returnList) {
+                rWord += if (returnList.lastIndexOf(word) < returnList.lastIndex)
+                    "${word[0].toUpperCase()}${word.substring(1, word.length)}$divider"
+                else
+                    "${word[0].toUpperCase()}${word.substring(1, word.length)}"
             }
-
-            return transliteratedName.substring(0, transliteratedName.length - 1)
+            return rWord
         }
     }
 
     fun toInitials(firstName: String?, lastName: String?): String? {
-        if(firstName == null && lastName != null)
-            return lastName.substring(0, 1).toUpperCase()
-        else if(firstName != null && lastName == null)
-            return firstName.substring(0, 1).toUpperCase()
-        else if(firstName == null && lastName == null || firstName?.trim() == "" && lastName?.trim() == "")
-            return null
+        return if (firstName == null && lastName != null)
+            lastName.substring(0, 1).toUpperCase()
+        else if (firstName != null && lastName == null)
+            firstName.substring(0, 1).toUpperCase()
+        else if (firstName == null && lastName == null || firstName?.trim() == "" && lastName?.trim() == "")
+            null
         else
-            return "${firstName?.substring(0, 1)?.toUpperCase()}${lastName?.substring(0, 1)?.toUpperCase()}"
+            "${firstName?.substring(0, 1)?.toUpperCase()}${lastName?.substring(0, 1)?.toUpperCase()}"
     }
 }
